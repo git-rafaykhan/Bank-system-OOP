@@ -298,6 +298,18 @@ public class Bank {
         }
     }
 
+    public void applyInterestToAccount(int accountNumber) {
+        Account acc = findAccountByNumber(accountNumber);
+        if (acc == null) {
+            System.out.println("Account not found!");
+        } else if (acc instanceof SavingsAccount) {
+            SavingsAccount savAcc = (SavingsAccount) acc;
+            savAcc.addInterest();
+        } else {
+            System.out.println("Interest can only be applied to Savings Accounts!");
+        }
+    }
+
     public void showAllAccounts() {
         if (accounts.isEmpty()) {
             System.out.println("No accounts found in the bank.");
@@ -323,7 +335,11 @@ public class Bank {
      `for (int i = 0; i < accounts.size(); i++)`
    - Gets account with `accounts.get(i)` and checks if `acc.getAccountNumber() == accountNumber`.
    - Returns the `Account` object if found, or `null` if not found.
-3. **`withdrawFromAccount(...)` (Runtime Dynamic Polymorphism)**:
+3. **`applyInterestToAccount(int accountNumber)` (Downcasting & `instanceof`)**:
+   - Finds the account and checks `if (acc instanceof SavingsAccount)`.
+   - Safely downcasts `(SavingsAccount) acc` to call `savAcc.addInterest()`.
+   - Rejects current accounts with a clear message: `"Interest can only be applied to Savings Accounts!"`.
+4. **`withdrawFromAccount(...)` (Runtime Dynamic Polymorphism)**:
    - When `acc.withdraw(amount)` is called:
      - If `acc` is a `SavingsAccount`, Java runs `SavingsAccount.withdraw()`.
      - If `acc` is a `CurrentAccount`, Java runs `CurrentAccount.withdraw()`.
@@ -351,11 +367,12 @@ public class Main {
             System.out.println("4. Withdraw");
             System.out.println("5. View Account Details");
             System.out.println("6. View All Accounts");
-            System.out.println("7. Exit");
-            System.out.print("Enter your choice (1-7): ");
+            System.out.println("7. Apply Interest");
+            System.out.println("8. Exit");
+            System.out.print("Enter your choice (1-8): ");
 
             if (!scanner.hasNextInt()) {
-                System.out.println("Invalid choice. Please enter a number between 1 and 7.");
+                System.out.println("Invalid choice. Please enter a number between 1 and 8.");
                 if (scanner.hasNext()) {
                     scanner.next();
                 }
@@ -434,12 +451,19 @@ public class Main {
                     break;
 
                 case 7:
+                    System.out.print("Enter Account Number: ");
+                    int intAccNum = scanner.nextInt();
+                    scanner.nextLine();
+                    bank.applyInterestToAccount(intAccNum);
+                    break;
+
+                case 8:
                     System.out.println("Thank you for using the Bank Management System. Goodbye!");
                     running = false;
                     break;
 
                 default:
-                    System.out.println("Invalid choice. Please select an option between 1 and 7.");
+                    System.out.println("Invalid choice. Please select an option between 1 and 8.");
                     break;
             }
         }

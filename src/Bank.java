@@ -40,6 +40,18 @@ public class Bank {
         }
     }
 
+    public void applyInterestToAccount(int accountNumber) {
+        Account acc = findAccountByNumber(accountNumber);
+        if (acc == null) {
+            System.out.println("Account not found!");
+        } else if (acc instanceof SavingsAccount) {
+            SavingsAccount savAcc = (SavingsAccount) acc;
+            savAcc.addInterest();
+        } else {
+            System.out.println("Interest can only be applied to Savings Accounts!");
+        }
+    }
+
     public void showAllAccounts() {
         if (accounts.isEmpty()) {
             System.out.println("No accounts found in the bank.");

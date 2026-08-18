@@ -14,11 +14,12 @@ public class Main {
             System.out.println("4. Withdraw");
             System.out.println("5. View Account Details");
             System.out.println("6. View All Accounts");
-            System.out.println("7. Exit");
-            System.out.print("Enter your choice (1-7): ");
+            System.out.println("7. Apply Interest");
+            System.out.println("8. Exit");
+            System.out.print("Enter your choice (1-8): ");
 
             if (!scanner.hasNextInt()) {
-                System.out.println("Invalid choice. Please enter a number between 1 and 7.");
+                System.out.println("Invalid choice. Please enter a number between 1 and 8.");
                 if (scanner.hasNext()) {
                     scanner.next();
                 }
@@ -97,12 +98,19 @@ public class Main {
                     break;
 
                 case 7:
+                    System.out.print("Enter Account Number: ");
+                    int intAccNum = scanner.nextInt();
+                    scanner.nextLine();
+                    bank.applyInterestToAccount(intAccNum);
+                    break;
+
+                case 8:
                     System.out.println("Thank you for using the Bank Management System. Goodbye!");
                     running = false;
                     break;
 
                 default:
-                    System.out.println("Invalid choice. Please select an option between 1 and 7.");
+                    System.out.println("Invalid choice. Please select an option between 1 and 8.");
                     break;
             }
         }

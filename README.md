@@ -157,6 +157,7 @@ Located at: `src/Bank.java`
   - `findAccountByNumber(int accountNumber)`: Iterates through the list using a standard `for` loop and returns the matching `Account` or `null` if not found.
   - `depositToAccount(int accountNumber, double amount)`: Finds the account and invokes its `deposit(amount)` method.
   - `withdrawFromAccount(int accountNumber, double amount)`: Finds the account and invokes its polymorphic `withdraw(amount)` method.
+  - `applyInterestToAccount(int accountNumber)`: Finds the account, verifies it is a `SavingsAccount`, and calls `addInterest()`.
   - `showAllAccounts()`: Iterates through all accounts in the list and calls `acc.displayInfo()`.
 
 ---
@@ -166,14 +167,15 @@ Located at: `src/Main.java`
 
 - Manages the application lifecycle through a `while (running)` loop.
 - Uses `java.util.Scanner` to read user console input.
-- Provides a clean text menu with 7 options:
+- Provides a clean text menu with 8 options:
   1. **Create Savings Account**: Prompts for account number, holder name, initial balance, and interest rate.
   2. **Create Current Account**: Prompts for account number, holder name, initial balance, and overdraft limit.
   3. **Deposit**: Prompts for account number and deposit amount.
   4. **Withdraw**: Prompts for account number and withdrawal amount.
   5. **View Account Details**: Prompts for account number and displays full details.
   6. **View All Accounts**: Lists every account registered in the system.
-  7. **Exit**: Gracefully exits the application.
+  7. **Apply Interest**: Prompts for savings account number and applies interest.
+  8. **Exit**: Gracefully exits the application.
 
 ---
 
@@ -475,6 +477,18 @@ public class Bank {
         }
     }
 
+    public void applyInterestToAccount(int accountNumber) {
+        Account acc = findAccountByNumber(accountNumber);
+        if (acc == null) {
+            System.out.println("Account not found!");
+        } else if (acc instanceof SavingsAccount) {
+            SavingsAccount savAcc = (SavingsAccount) acc;
+            savAcc.addInterest();
+        } else {
+            System.out.println("Interest can only be applied to Savings Accounts!");
+        }
+    }
+
     public void showAllAccounts() {
         if (accounts.isEmpty()) {
             System.out.println("No accounts found in the bank.");
@@ -512,11 +526,12 @@ public class Main {
             System.out.println("4. Withdraw");
             System.out.println("5. View Account Details");
             System.out.println("6. View All Accounts");
-            System.out.println("7. Exit");
-            System.out.print("Enter your choice (1-7): ");
+            System.out.println("7. Apply Interest");
+            System.out.println("8. Exit");
+            System.out.print("Enter your choice (1-8): ");
 
             if (!scanner.hasNextInt()) {
-                System.out.println("Invalid choice. Please enter a number between 1 and 7.");
+                System.out.println("Invalid choice. Please enter a number between 1 and 8.");
                 if (scanner.hasNext()) {
                     scanner.next();
                 }
@@ -595,12 +610,19 @@ public class Main {
                     break;
 
                 case 7:
+                    System.out.print("Enter Account Number: ");
+                    int intAccNum = scanner.nextInt();
+                    scanner.nextLine();
+                    bank.applyInterestToAccount(intAccNum);
+                    break;
+
+                case 8:
                     System.out.println("Thank you for using the Bank Management System. Goodbye!");
                     running = false;
                     break;
 
                 default:
-                    System.out.println("Invalid choice. Please select an option between 1 and 7.");
+                    System.out.println("Invalid choice. Please select an option between 1 and 8.");
                     break;
             }
         }
